@@ -1,38 +1,53 @@
 {
-  "name": "wqx_graduation_project",
-  "version": "0.1.0",
   "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^13.1.1",
-    "@testing-library/user-event": "^13.5.0",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
-  },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "PORT=8888 umi dev",
+    "build": "umi build",
+    "postinstall": "umi generate tmp",
+    "prettier": "prettier --write '**/*.{js,jsx,tsx,ts,less,md,json}'",
+    "test": "umi-test",
+    "test:coverage": "umi-test --coverage"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+  "gitHooks": {
+    "pre-commit": "lint-staged"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
+  "lint-staged": {
+    "*.{js,jsx,less,md,json}": [
+      "prettier --write"
     ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
+    "*.ts?(x)": [
+      "prettier --parser=typescript --write"
     ]
+  },
+  "dependencies": {
+    "@ant-design/icons": "^4.7.0",
+    "@ant-design/pro-layout": "^6.5.0",
+    "@ant-design/pro-table": "^2.73.0",
+    "@monaco-editor/react": "^4.4.4",
+    "@rjsf/antd": "^4.1.1",
+    "@rjsf/core": "^4.1.1",
+    "ahooks": "^3.3.10",
+    "antd": "^4.20.2",
+    "axios": "^0.27.2",
+    "dayjs": "^1.11.1",
+    "json-schema-editor-visual": "^2.0.0",
+    "react": "17.x",
+    "react-cookies": "^0.1.1",
+    "react-dom": "17.x",
+    "react-jsonschema-form": "^1.8.1",
+    "react-router-dom": "^5.3.1",
+    "umi": "^3.5.23"
+  },
+  "devDependencies": {
+    "@types/react": "^17.0.0",
+    "@types/react-cookies": "^0.1.0",
+    "@types/react-dom": "^17.0.0",
+    "@types/react-jsonschema-form": "^1.7.8",
+    "@umijs/preset-react": "1.x",
+    "@umijs/test": "^3.5.23",
+    "lint-staged": "^10.0.7",
+    "prettier": "^2.2.0",
+    "typescript": "^4.1.2",
+    "yorkie": "^2.0.0"
   }
 }
