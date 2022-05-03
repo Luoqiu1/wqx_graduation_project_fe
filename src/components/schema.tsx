@@ -199,7 +199,9 @@ export const SchemaListMy = () => {
         dataSource={data}
         renderItem={(item) => (
           <List.Item>
-            <Button href={UpdateSchemaURL(item.id)}>{item.name}</Button>
+            {/*todo，先不跳转*/}
+            {/*<Button href={UpdateSchemaURL(item.id)}>{item.name}</Button>*/}
+            <Button>{item.name}</Button>
           </List.Item>
         )}
       />
