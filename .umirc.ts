@@ -1,6 +1,8 @@
 import { defineConfig } from 'umi';
 
 export default defineConfig({
+  // 静态 build，解决 nginx 404 问题
+  exportStatic: {},
   nodeModulesTransform: {
     type: 'none',
   },
