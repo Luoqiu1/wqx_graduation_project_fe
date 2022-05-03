@@ -9,10 +9,27 @@ import ProTable, {
 import { GetContentDetailURL, UpdateSchemaURL } from '@/services/apiFormat';
 import request from 'umi-request';
 import { HTTPHost, HTTPPort } from '@/consts/http';
-import { Button, message, PageHeader } from 'antd';
+import { Button, message, PageHeader, Tag, Popconfirm } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { GetResource } from '@/services/resource';
-import { IsContentCreate } from '@/consts/content';
+import {
+  CntStatusAudit,
+  CntStatusDeny,
+  CntStatusDispatch,
+  CntStatusFail,
+  CntStatusNone,
+  CntStatusOnline,
+  IsContentCreate,
+} from '@/consts/content';
+import {
+  DeleteContentDetail,
+  DenyContentDetail,
+  GetStatusInfo,
+  PassContentDetail,
+  SubmitContentDetail,
+} from '@/services/content';
+import { sleep } from 'ahooks/es/utils/testingHelpers';
+import { PageReloadSleep } from '@/consts/page';
 
 export default function Page(props) {
   return (
@@ -35,6 +52,7 @@ type ContentItem = {
   update_time: number;
   create_by: string;
   opt_user: string;
+  status: number;
 };
 
 const columnsResource: ProColumns<ContentItem>[] = [
@@ -54,14 +72,6 @@ const columnsResource: ProColumns<ContentItem>[] = [
       </a>
     ),
   },
-  // {
-  //   title: '数据内容',
-  //   dataIndex: 'display',
-  //   ellipsis: true,
-  //   copyable: true,
-  //   tip: '数据过长会自动收缩',
-  //   valueType: "text"
-  // },
   {
     title: '创建时间',
     key: 'createShowTime',
@@ -115,30 +125,138 @@ const columnsResource: ProColumns<ContentItem>[] = [
     dataIndex: 'opt_user',
   },
   {
+    disable: true,
+    title: '状态',
+    dataIndex: 'status',
+    search: false,
+    renderFormItem: (_, { defaultRender }) => {
+      return defaultRender(_);
+    },
+    render: (_, entity) => {
+      const { color, statusName } = GetStatusInfo(entity.status);
+      return (
+        //<Space>
+        // {/*<Tag color={color} key={name}>*/}
+        <Tag color={color}>{statusName}</Tag>
+        //</Space>
+      );
+    },
+  },
+  {
     title: '操作',
     valueType: 'option',
     key: 'option',
-    render: (text, record, _, action) => [
-      <a
-        key="editable"
-        onClick={() => {
-          action?.startEditable?.(record.id);
-        }}
-      >
-        编辑
-      </a>,
-      <a href={record.url} target="_blank" rel="noopener noreferrer" key="view">
-        查看
-      </a>,
-      <TableDropdown
-        key="actionGroup"
-        onSelect={() => action?.reload()}
-        menus={[
-          { key: 'copy', name: '复制' },
-          { key: 'delete', name: '删除' },
-        ]}
-      />,
-    ],
+    render: (dom, entity) => {
+      const contentSubmit = () => {
+        let requestData = {
+          loc: entity.loc,
+          display: entity.display,
+          resource: {
+            id: entity.res_id,
+          },
+        };
+        SubmitContentDetail(requestData).then((data) => {
+          if (data && data.code != 0) {
+            let text: string = `code: ${data.code}, ${data.message}`;
+            message.error(text);
+          } else {
+            message.success('提交数据成功');
+            sleep(PageReloadSleep).then(() => {
+              window.location.reload();
+            });
+          }
+        });
+      };
+
+      const contentPass = () => {
+        let requestData = {
+          loc: entity.loc,
+          resource: {
+            id: entity.res_id,
+          },
+        };
+        PassContentDetail(requestData).then((data) => {
+          if (data && data.code != 0) {
+            let text: string = `code: ${data.code}, ${data.message}`;
+            message.error(text);
+          } else {
+            message.success('上线数据成功！');
+            sleep(PageReloadSleep).then(() => {
+              window.location.reload();
+            });
+          }
+        });
+      };
+
+      const contentDeny = () => {
+        let requestData = {
+          loc: entity.loc,
+          resource: {
+            id: entity.res_id,
+          },
+        };
+        DenyContentDetail(requestData).then((data) => {
+          if (data && data.code != 0) {
+            let text: string = `code: ${data.code}, ${data.message}`;
+            message.error(text);
+          } else {
+            message.success('下线数据成功！');
+            sleep(PageReloadSleep).then(() => {
+              window.location.reload();
+            });
+          }
+        });
+      };
+
+      const contentDelete = () => {
+        let requestData = {
+          loc: entity.loc,
+          resource: {
+            id: entity.res_id,
+          },
+        };
+        DeleteContentDetail(requestData).then((data) => {
+          if (data && data.code != 0) {
+            let text: string = `code: ${data.code}, ${data.message}`;
+            message.error(text);
+          } else {
+            message.success('删除数据成功！');
+            sleep(PageReloadSleep).then(() => {
+              window.location.reload();
+            });
+          }
+        });
+      };
+
+      return [
+        <a onClick={contentSubmit}>提交</a>,
+        <Popconfirm
+          title="你确定要上线吗？"
+          okText="确定"
+          cancelText="取消"
+          onConfirm={contentPass}
+        >
+          <a>上线</a>
+        </Popconfirm>,
+
+        <Popconfirm
+          title="你确定要下线吗？"
+          okText="确定"
+          cancelText="取消"
+          onConfirm={contentDeny}
+        >
+          <a>下线</a>
+        </Popconfirm>,
+        <Popconfirm
+          title="你确定要删除吗？"
+          okText="确定"
+          cancelText="取消"
+          onConfirm={contentDelete}
+        >
+          <a style={{ color: '#FF0000' }}>删除</a>
+        </Popconfirm>,
+      ];
+    },
   },
 ];
 

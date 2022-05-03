@@ -52,7 +52,6 @@ const columnsResource: ProColumns<ResourceItem>[] = [
     dataIndex: 'name',
     copyable: true,
     ellipsis: true,
-    tip: '项目名称过长会自动收缩',
     formItemProps: {
       rules: [
         {
@@ -253,18 +252,28 @@ const menu = (
   </Menu>
 );
 
-const ResourceList = () => {
+export const ResourceList: React.FC<{ group_id: number }> = (props) => {
+  let url: string;
+  let group_id = props.group_id;
+  if (group_id != 0) {
+    url = `${HTTPHost}:${HTTPPort}/resource/list?group_id=${group_id}`;
+  } else {
+    url = `${HTTPHost}:${HTTPPort}/resource/list`;
+  }
   const actionRef = useRef<ActionType>();
   return (
     <ProTable<ResourceItem>
+      // todo！！！！ key 的重要性！
+      // 没有这个 key 的时候，路由变化了不刷新！
+      // 例如从 /group/4、变化为 /group/1、/group/2 等等等等，都不刷新！
+      key={group_id}
       columns={columnsResource}
       actionRef={actionRef}
       cardBordered
-      request={async (params = {}, sort, filter) => {
-        console.log(sort, filter);
+      request={(params = {}, sort, filter) => {
         return request<{
           data: ResourceItem[];
-        }>(`${HTTPHost}:${HTTPPort}/resource/list`, {
+        }>(url, {
           params,
         });
       }}
@@ -297,7 +306,6 @@ const ResourceList = () => {
       }}
       pagination={{
         pageSize: 5,
-        onChange: (page) => console.log(page),
       }}
       dateFormatter="string"
       toolBarRender={() => [
@@ -309,17 +317,12 @@ const ResourceList = () => {
         >
           新建项目
         </Button>,
-        // <Dropdown key="menu" overlay={menu}>
-        //   <Button>
-        //     <EllipsisOutlined/>
-        //   </Button>
-        // </Dropdown>,
       ]}
     />
   );
 };
 
-export default () => <ResourceList />;
+// export default () => <ResourceList/>;
 
 export const ResourceListMy = () => {
   const [data, setData] = useState([]);

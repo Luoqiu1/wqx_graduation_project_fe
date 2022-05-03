@@ -19,7 +19,7 @@ import { useRequest } from 'ahooks';
 import { sleep } from 'ahooks/es/utils/testingHelpers';
 import { Link } from 'umi';
 import cookie from 'react-cookies';
-import { getGroupList } from '@/services/group';
+import { GroupList } from '@/services/group';
 import { SchemaList } from '@/services/schema';
 
 const { Option } = Select;
@@ -38,7 +38,7 @@ const formItemLayout = {
       span: 24,
     },
     sm: {
-      span: 16,
+      span: 6,
     },
   },
 };
@@ -121,9 +121,12 @@ const CreateResourcePage = () => {
             message: '请选择项目下游！',
           },
         ]}
+        help={'如业务需要特殊下游处理逻辑请联系平台管理员！'}
       >
         <Select>
           <Select.Option value={2}>Redis</Select.Option>
+          <Select.Option value={3}>Kafka</Select.Option>
+          <Select.Option value={4}>API</Select.Option>
           <Select.Option value={10000}>空下游（仅做存储）</Select.Option>
         </Select>
       </Form.Item>
@@ -157,7 +160,7 @@ const filterStrNotContainOption = (inputValue, option) => {
 const GroupFormItem = () => {
   const [groupFormItem, setGroupOption] = useState<any>(null);
   useEffect(() => {
-    getGroupList().then((data) => {
+    GroupList().then((data) => {
       if (data && data.code != 0) {
         let text: string = `code: ${data.code}, ${data.message}`;
         message.error(text);

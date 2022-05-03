@@ -35,7 +35,6 @@ const columnsResource: ProColumns<SchemaItem>[] = [
     dataIndex: 'name',
     copyable: true,
     ellipsis: true,
-    tip: 'Schema 名称过长会自动收缩',
     formItemProps: {
       rules: [
         {
@@ -45,7 +44,8 @@ const columnsResource: ProColumns<SchemaItem>[] = [
       ],
     },
     render: (dom, entity, index, action, schema) => (
-      <a href={UpdateSchemaURL(entity.id)}>{entity.name}</a>
+      // <a href={UpdateSchemaURL(entity.id)}>{entity.name}</a>
+      <a>{entity.name}</a>
     ),
   },
   {

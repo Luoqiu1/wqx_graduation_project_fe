@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useRequest } from 'ahooks';
 import { GetSchema } from '@/services/schema';
-import { Button, message, Input, PageHeader, Card } from 'antd';
+import { Button, message, Input, PageHeader, Card, Tag, Space } from 'antd';
 import JSONSchemaForm, { withTheme } from '@rjsf/core';
 import { Theme as AntDTheme } from '@rjsf/antd';
 import {
   CreateContentDetail,
   GetContentDetail,
+  GetStatusInfo,
   SaveContentDetail,
 } from '@/services/content';
 import { IsContentCreate } from '@/consts/content';
@@ -72,7 +73,7 @@ const ContentDetail = (props) => {
         let text: string = `code: ${data.code}, ${data.message}`;
         message.error(text);
       } else {
-        setSchemaData(() => JSON.parse(data.data.json_schema));
+        setSchemaData(() => data.data.json_schema);
       }
     });
   }, []);
@@ -131,10 +132,17 @@ const ContentDetail = (props) => {
     console.log(event.target.value);
     setKeyword(event.target.value);
   };
+  const { color, statusName } = GetStatusInfo(contentData.status);
 
   return (
     <div>
       <Card title="数据详情" size="large">
+        <div>
+          <Space>
+            <Tag color={color}>{statusName}</Tag>
+          </Space>
+        </div>
+        <br />
         <div>主键 Keyword：</div>
         <br />
         <Input defaultValue={loc} onChange={onInputChange} />

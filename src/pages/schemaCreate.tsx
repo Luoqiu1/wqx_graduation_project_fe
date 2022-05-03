@@ -83,7 +83,7 @@ export default function Page(props) {
     let schemaJSONDataRemoveDefaultTitle = JSON.stringify(tmp);
     let schemaInfo = {
       ...schemaBaseData,
-      json_schema: schemaJSONDataRemoveDefaultTitle,
+      json_schema: tmp,
     };
     runAsync(schemaInfo).then((data) => {
       if (data && data.code != 0) {

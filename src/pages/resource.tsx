@@ -1,5 +1,5 @@
 import React from 'react';
-import ResourceList from '@/components/resource';
+import { ResourceList } from '@/components/resource';
 import { PageHeader } from 'antd';
 
 export default function Page(props) {
@@ -10,7 +10,7 @@ export default function Page(props) {
         onBack={() => props.history.goBack()}
         subTitle="返回上一级"
       />
-      <ResourceList />
+      <ResourceList group_id={0} />
     </div>
   );
 }

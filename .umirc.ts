@@ -16,6 +16,11 @@ export default defineConfig({
     { path: '/', redirect: '/login' },
     { path: '/content', component: '@/pages/content' },
     { path: '/contentDetail', component: '@/pages/contentDetail' },
+    {
+      path: '/group/:id',
+      component: '@/pages/group',
+      wrappers: ['@/wrappers/auth'],
+    },
     { path: '/login', component: '@/pages/login', name: '登录' },
     { path: '/register', component: '@/pages/register', name: '注册' },
     {
