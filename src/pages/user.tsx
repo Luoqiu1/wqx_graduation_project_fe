@@ -21,18 +21,6 @@ export default function Page(props) {
         </Card>
 
         <Card
-          title="我的 Schema"
-          size="large"
-          extra={
-            <Button type="primary">
-              <Link to={'/schemaCreate'}>新建我的 Schema</Link>
-            </Button>
-          }
-        >
-          <SchemaListMy />
-        </Card>
-
-        <Card
           title="我的项目"
           size="large"
           extra={
@@ -42,6 +30,18 @@ export default function Page(props) {
           }
         >
           <ResourceListMy />
+        </Card>
+
+        <Card
+          title="我的 Schema"
+          size="large"
+          extra={
+            <Button type="primary">
+              <Link to={'/schemaCreate'}>新建我的 Schema</Link>
+            </Button>
+          }
+        >
+          <SchemaListMy />
         </Card>
       </Space>
     </div>
