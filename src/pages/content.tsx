@@ -125,6 +125,20 @@ const columnsResource: ProColumns<ContentItem>[] = [
     dataIndex: 'opt_user',
   },
   {
+    title: '状态',
+    dataIndex: 'status',
+    valueType: 'select',
+    hideInTable: true,
+    valueEnum: {
+      0: { text: '初始化' },
+      1: { text: '待审核' },
+      2: { text: '上线' },
+      3: { text: '下线' },
+      4: { text: '上线中' },
+      5: { text: '上线失败' },
+    },
+  },
+  {
     disable: true,
     title: '状态',
     dataIndex: 'status',
