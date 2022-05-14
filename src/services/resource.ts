@@ -31,6 +31,12 @@ export async function ListMyResource() {
 }
 
 export async function GetResource(data: { id: number }) {
+  if (!data) {
+    // const {runAsync} = useRequest(GetResource);
+    // 这里好像会在声明的时候莫名其妙调用一次，此时 data 为空导致 400
+    // 特判一下，为空的时候直接返回
+    return null;
+  }
   let response = await fetch(`${HTTPHost}:${HTTPPort}/resource/get`, {
     method: 'POST',
     headers: {

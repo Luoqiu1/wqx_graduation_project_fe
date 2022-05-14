@@ -290,7 +290,6 @@ const ContentList = (props) => {
       }
     });
   }, []);
-
   return (
     <ProTable<ContentItem>
       columns={columnsResource}
