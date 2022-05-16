@@ -124,9 +124,9 @@ const CreateResourcePage = () => {
         help={'如业务需要特殊下游处理逻辑请联系平台管理员！'}
       >
         <Select>
-          <Select.Option value={2}>Redis</Select.Option>
-          <Select.Option value={3}>Kafka</Select.Option>
-          <Select.Option value={4}>API</Select.Option>
+          <Select.Option value={1100}>Redis</Select.Option>
+          <Select.Option value={1050}>Kafka</Select.Option>
+          <Select.Option value={1200}>API</Select.Option>
           <Select.Option value={10000}>空下游（仅做存储）</Select.Option>
         </Select>
       </Form.Item>
